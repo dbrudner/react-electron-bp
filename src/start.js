@@ -5,6 +5,8 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const url = require("url");
 
+const api = require("./api");
+
 let mainWindow;
 
 function createWindow() {
@@ -24,7 +26,15 @@ function createWindow() {
 	});
 }
 
-app.on("ready", createWindow);
+function onReady() {
+	createWindow();
+
+	api.listen(5000, () => {
+		console.log("API Listening");
+	});
+}
+
+app.on("ready", onReady);
 
 app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") {
